@@ -1,127 +1,130 @@
-# Xerness · 真实场景
+# Xerness · Use Cases
 
-> 三个具体例子,看 Xerness 在团队里到底怎么用。
-> 都是非技术语言,产品/运营也能看懂。
-
----
-
-## 场景一:做一个新功能 (PRD → 上线)
-
-**背景**:产品提了个需求 —— "用户希望登录后能看到自己的订单历史"。
-
-### 没有 Xerness 的样子
-
-```
-产品 (在飞书) ──► "做个订单历史页"
-                          │
-                          ▼ (复制粘贴到 Cursor)
-研发 ──► 自己理解 / 自己设计 / 写代码 (40% 时间在猜需求)
-                          │
-                          ▼ (写完 ping 测试)
-测试 ──► 重新读一遍需求 / 自己写测试用例
-                          │
-                          ▼
-发布 ──► 没人记得这次改了什么,出问题靠回滚
-```
-
-每一步都在重复劳动,且容易理解错。
-
-### 有 Xerness 的样子
-
-```
-产品 ──► 提需求 (1 句话)
-         │
-         ▼ AI 产品角色自动产出 PRD
-              │
-              ▼ AI 研发角色直接接手实现
-                   │
-                   ▼ AI 测试角色自动产出测试点
-                        │
-                        ▼ AI 运维角色自动出发布检查清单
-                             │
-                             ▼ 上线
-```
-
-**关键差异**:每一步的产出**自动**作为下一步的输入,中间不需要人肉复制粘贴。
+This document presents three concrete scenarios showing how a team's working style changes before and after adopting Xerness. The scenarios are written in non-technical language and are appropriate for product managers, operators, and external partners.
 
 ---
 
-## 场景二:新成员进项目
+## Scenario 1 · From Request to Production
 
-**背景**:招了个新研发,加入一个跑了半年的项目。
+**Context:** A product manager requests a new feature — *"users should be able to view their order history after logging in."*
 
-### 没有 Xerness
-
-第一周:
-- 看代码看不懂为什么这么写
-- 问老人:"这个为什么用 X 不用 Y?" → "哦上次踩过 Y 的坑"
-- 问完就忘,下次还会再踩
-
-通常需要 **1-2 周**才能开始独立产出。
-
-### 有 Xerness
-
-新人进项目第一天,他用的 AI 已经知道:
-
-- 这个项目的历史决策(为什么选 X 不选 Y)
-- 团队的代码规范
-- 项目踩过的坑
-- 当前在做什么、卡在哪
-
-新人写代码时,AI 会主动提醒:
-> "这块上次有人这么写过,后来发现问题,建议换 Y 写法。"
-
-通常 **3 天**就能产出。
-
----
-
-## 场景三:跨多个 AI 工具协作
-
-**背景**:团队里有人爱用 Cursor,有人爱用 Claude Code,还有人在试 Codex。
-
-### 没有 Xerness
-
-每个人有自己的"提示词模板""使用习惯"。
-
-- 张三的代码风格和李四不一样
-- 同一个需求,两人写出来截然不同
-- review 时全靠"读代码的人感觉"
-
-团队效率 = 每个人独立效率的简单相加,**没有协同复利**。
-
-### 有 Xerness
-
-**同一套规范,同一套工作流,同一套记忆**,跨工具生效。
-
-不管你用 Cursor 还是 Claude Code:
-- 写出来的代码风格一致
-- 评审用一样的标准
-- 共享同一个团队知识库
+### Before Xerness
 
 ```
-       ┌─── Cursor (张三)  ──┐
-       │                      │
-团队规范├─── Claude Code (李四) ┤── 输出风格统一
-       │                      │
-       └─── Codex (王五)    ──┘
+Product (in chat tool) ── describes the request
+       │
+       ▼  manually pasted into the IDE
+Engineering ── interprets, designs, and implements
+              (significant time spent inferring intent)
+       │
+       ▼  notifies QA when "done"
+QA ── re-reads the original request, designs test cases from scratch
+       │
+       ▼
+Release ── no unified change record; problems are mitigated by rollback
 ```
 
-工具不同,**输出像同一个团队**。
+Each step contains repeated work and risk of misinterpretation.
+
+### After Xerness
+
+```
+Product ── submits the request
+       │
+       ▼  Product agent automatically produces a PRD
+       │
+       ▼  Engineering agent picks up the PRD and produces design + code
+       │
+       ▼  QA agent automatically generates test cases
+       │
+       ▼  DevOps agent automatically generates a release checklist
+       │
+       ▼
+Production
+```
+
+**Key difference:** the output of each step is automatically passed to the next. Cross-role handoff no longer depends on manual transfer of context.
 
 ---
 
-## 适用边界
+## Scenario 2 · Onboarding a New Engineer
 
-这三个场景都假设:
+**Context:** A new engineer joins a project that has been iterating for six months.
 
-- 团队 ≥ 3 人(不然没有协作问题)
-- 已经在用 AI 写代码(不是从零教 AI)
-- 有正在迭代的项目(纯一次性脚本不需要这层)
+### Before Xerness
+
+| Phase | Behavior |
+|-------|----------|
+| Days 1–3 | Reads code; many decisions are opaque |
+| Days 4–7 | Repeatedly checks with senior engineers about background and historical decisions |
+| Days 8–14 | Begins independent output, but still risks repeating known pitfalls |
+
+Typical time to independent output: **about two weeks.**
+
+### After Xerness
+
+From day one, the new engineer's AI already has access to:
+
+- The full background of historical decisions on the project
+- The team's coding standards and review criteria
+- Pitfalls already encountered, along with the agreed mitigations
+- The current iteration's goals and outstanding work
+
+While coding, the AI proactively surfaces relevant history:
+
+> *"A similar implementation existed in this area; it was later replaced with pattern Y because of issue X."*
+
+Typical time to independent output: **about three days.**
 
 ---
 
-## 你想问的下一步
+## Scenario 3 · Coordinating Across Different AI Tools
 
-- 这个场景在我们公司能落地吗? → AMA 现场聊
-- 想看 demo? → 联系 ZIHAO
-- 想了解技术细节? → 那一份不在这个仓库里
+**Context:** Team members use different AI coding tools — some Cursor, some Claude Code, some experimenting with Codex.
+
+### Before Xerness
+
+Each engineer maintains private prompt templates and habits, leading to:
+
+- Code style differences across team members
+- The same request implemented very differently by different engineers
+- Code review outcomes that depend on which reviewer is assigned
+
+Team-level efficiency is roughly the sum of individual efficiencies. **There is no compounding.**
+
+### After Xerness
+
+Regardless of which tool each engineer uses, the **shared standards, workflows, and memory** provided by Xerness apply consistently:
+
+```
+       ┌── Cursor (engineer A) ──┐
+       │                         │
+shared │                         │
+rules  ├── Claude Code (B) ──────┤── style and quality converge
+       │                         │
+       └── Codex (engineer C) ───┘
+```
+
+Different tools, **convergent output.** Predictability of team output increases substantially.
+
+---
+
+## Prerequisites
+
+The three scenarios assume the following:
+
+- Team size of at least three engineers (smaller teams see limited benefit)
+- The team is already using AI coding tools (Xerness does not bootstrap AI adoption)
+- An ongoing iterating project (not a one-off script)
+
+---
+
+## Going Deeper
+
+- **Applicability to your team** — best discussed during AMA
+- **Live demonstration** — please contact us through business channels
+- **Internal implementation details** — out of scope for this repository
+
+---
+
+*Additional scenarios will be added as the product evolves.*

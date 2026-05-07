@@ -1,155 +1,215 @@
 # Xerness
 
-> **一句话**:Xerness 把团队里"每个人各自用 AI"的混乱,变成"团队一起用 AI"的统一工作系统。
+**The team operating layer for AI coding agents.**
+
+Xerness is a team-level collaboration system for engineering organizations. It sits above AI coding tools such as Cursor, Claude Code, Codex, and OpenClaw, and adds the missing team layer — role specialization, workflow orchestration, repository-native memory, and cross-role handoff — turning *individual use of AI* into *coordinated team use of AI*.
+
+> This repository is a **public overview** of Xerness, written for product managers, operators, partners, and technical liaisons.
+> It contains no source code or internal implementation details.
+>
+> Maintainer: **XerpaAI** · Status: in active internal use, preparing core-layer open source release.
 
 ---
 
-## 它不是什么
+## Table of Contents
 
-它**不是**又一个写代码的 AI 工具。
-
-市面上已经有 Cursor、Claude Code、Codex、OpenClaw —— 这些是"AI 工具",每个开发者自己用。
-
-Xerness **不和它们抢位置**,而是站在它们之上。
+- [1. Background and Positioning](#1-background-and-positioning)
+- [2. Product Architecture](#2-product-architecture)
+- [3. Core Capabilities](#3-core-capabilities)
+- [4. Technical Architecture](#4-technical-architecture)
+- [5. Relationship to Existing Tools](#5-relationship-to-existing-tools)
+- [6. Who It Is For](#6-who-it-is-for)
+- [7. Current Status](#7-current-status)
+- [8. Further Reading](#8-further-reading)
+- [9. Contact](#9-contact)
 
 ---
 
-## 它是什么
+## 1. Background and Positioning
+
+Over the past two years, AI coding tools (Cursor, Claude Code, Copilot, Codex, etc.) have meaningfully improved **individual** developer productivity. At the team level, however, we observe a consistent set of unresolved problems:
+
+| Dimension | Current Reality |
+|-----------|-----------------|
+| Usage style | Each engineer invents their own prompts and workflows; no shared standard |
+| Knowledge retention | Lessons learned are scattered across chat history; rarely reused |
+| Cross-role handoff | Product → Engineering → QA → Release relies on manual copy-paste |
+| New-hire onboarding | No structured way to transfer "how this team uses AI" |
+| Team-level efficiency | Individuals are 30% faster, but the team is not |
+
+Xerness is positioned to fill that team operating layer:
+
+> Existing AI tools answer *whether AI can do the work*.
+> Xerness answers *how a team uses AI together*.
+
+---
+
+## 2. Product Architecture
 
 ```
-┌─────────────────────────────────────────────┐
-│             团队 (PM / 研发 / 测试)          │
-└─────────────────────────────────────────────┘
-                      │
-        ┌─────────────▼─────────────┐
-        │        Xerness            │ ← 团队怎么一起用 AI
-        │  (角色 / 流程 / 知识沉淀)  │
-        └─────────────┬─────────────┘
-                      │
-   ┌────────┬────────┼────────┬────────┐
-   ▼        ▼        ▼        ▼        ▼
- Cursor  Claude   Codex   OpenClaw   ...   ← 每个人手上的 AI 工具
-         Code
-```
+┌──────────────────────────────────────────────────────────┐
+│         Team (Product / Engineering / QA / DevOps)       │
+└──────────────────────────────────────────────────────────┘
+                            │
+              ┌─────────────▼─────────────┐
+              │          Xerness          │
+              │   Team operating layer    │
+              │                           │
+              │  · Role routing           │
+              │  · Workflows & handoffs   │
+              │  · Repo-native memory     │
+              │  · Review & ship rituals  │
+              └─────────────┬─────────────┘
+                            │
+        ┌──────────┬────────┼─────────┬──────────┐
+        ▼          ▼        ▼         ▼          ▼
+     Cursor   Claude Code  Codex   OpenClaw     ...
 
-**Xerness 是团队层。** 它管的不是"AI 怎么写代码",而是"团队怎么协调地用 AI"。
-
----
-
-## 它解决什么真实问题
-
-很多团队已经在用 AI,但都遇到下面这些事:
-
-- 张三的 prompt 用法和李四不一样,沟通成本高
-- 谁踩过的坑,下个人还会再踩一遍
-- 产品提需求 → 研发实现 → 测试验证,中间靠复制粘贴聊天记录
-- 新人来了,不知道团队"该怎么用 AI"
-- 好的写法、好的规范,只在某个人脑子里
-
-一句话:
-
-> AI 让每个人快了 30%,但团队没快 30%,因为没人沉淀。
-
-Xerness 就是补这一层。
-
----
-
-## 三件具体的事
-
-### 1. 角色化分工
-
-不是一个万能 AI 助手帮你做所有事。
-
-Xerness 把 AI 拆成几种角色:
-
-| 角色 | 干什么 |
-|------|--------|
-| 产品经理 | 把模糊需求变 PRD |
-| 研发(前/后端) | 写代码 |
-| 测试 | 写测试用例、跑回归 |
-| 运维 | 部署、监控 |
-
-**每个角色有自己的"性格"和"做事方式",而不是一个模糊的全能助手。**
-
----
-
-### 2. 团队知识沉淀
-
-团队的经验不再只是 Confluence 文档(没人看),而是 AI 真的会用的东西:
-
-- 编码规范 → AI 写代码时自动遵守
-- 评审标准 → AI 审 PR 时自动检查
-- 历史踩坑 → AI 下次不再犯同样的错
-- 项目背景 → 新成员的 AI 一上来就知道"我们之前为什么这么决定"
-
----
-
-### 3. 跨角色交接
-
-产品 → 研发 → 测试 → 发布,这一串,**不再靠人肉复制聊天记录**。
-
-每一步的产出会自动作为下一步的输入。
-
-```
-PM 提需求 ──► 自动生成 PRD ──► 研发接着实现
-                                    │
-                                    ▼
-                               自动生成测试点
-                                    │
-                                    ▼
-                               测试接着跑
-                                    │
-                                    ▼
-                               发布清单自动出
+                AI coding & execution tools
 ```
 
 ---
 
-## 它适合谁
+## 3. Core Capabilities
 
-✅ **适合**
+### 3.1 Role Specialization
 
-- 3-30 人的工程团队
-- 已经在用 Cursor / Claude Code / Codex 的团队
-- 老板/技术负责人想"让团队的 AI 用法统一起来"
+Xerness does not provide a single general-purpose assistant. Instead, it defines distinct engineering roles. Each role has its own behavior definition (SOUL), workflow preferences, and skill set.
 
-❌ **不适合**
+| Role | Responsibility |
+|------|----------------|
+| Product (PM) | Vague request → PRD |
+| Engineering (Tech) | Technical design and implementation |
+| QA (Test) | Test cases and regression |
+| DevOps | Deployment and monitoring |
 
-- 个人项目(用不上协作)
-- 还完全没用 AI 的团队(先解决用不用,再解决怎么一起用)
+### 3.2 Workflow Orchestration
 
----
+Tasks are described declaratively as YAML DAGs. The scheduler decides which steps run in parallel and which must run in series. Each node corresponds to one role agent's execution; its artifact is automatically passed to the next node as input.
 
-## 它和现有工具关系
+### 3.3 Repository-Native Memory
 
-| 工具 | 它擅长什么 | Xerness 加什么 |
-|------|------------|----------------|
-| **Cursor / Claude Code** | 单人写代码界面好用 | 让全团队按一套规范、一套流程用它 |
-| **Codex** | 干活执行力强 | 团队层的协作和交接 |
-| **OpenClaw** | 持久化 AI 助手 | 仓库级别的工作流和知识沉淀 |
+Team standards and lessons live **inside the project repository**, not in an external knowledge base. Memory is structured by category — decisions, lessons, patterns, solutions, context — and is retrieved by agents before execution. New team members start with the team's full operating history, not a blank slate.
 
-**核心区别**:
-- 那些工具解决"AI 能不能做事"
-- Xerness 解决"团队怎么一起用 AI 做事"
+### 3.4 Cross-Role Handoff
+
+When a role completes its task, output is delivered as a standardized artifact rather than as conversational context. This makes the entire Product → Engineering → QA → Release pipeline traceable and replayable.
 
 ---
 
-## 现在做到哪一步
+## 4. Technical Architecture
 
-- ✅ 核心引擎跑通 (PM/研发/测试/运维 四角色协作)
-- ✅ 内部团队在用
-- ✅ 接入了 Cursor 和 Claude Code
-- 🟡 接入 Codex(进行中)
-- 🟡 准备开源核心层
+### 4.1 System Layers
+
+```
+┌─────────────────────────────────────────────────┐
+│  Adapter Layer                                  │
+│  CLI · Cursor · Claude Code · Codex · OpenClaw  │
+├─────────────────────────────────────────────────┤
+│  Orchestration Layer                            │
+│  IntentParser · DAGScheduler · WorkflowEngine   │
+├─────────────────────────────────────────────────┤
+│  Execution Layer                                │
+│  AgentLoop · BaseAgent · SkillRegistry          │
+├─────────────────────────────────────────────────┤
+│  Infrastructure Layer                           │
+│  AgentClient · MessageBus · ArtifactStore       │
+│  MemoryStore · Logger                           │
+└─────────────────────────────────────────────────┘
+```
+
+### 4.2 Key Components
+
+| Component | Responsibility |
+|-----------|----------------|
+| **IntentParser** | Parses natural-language requests into a structured `ParsedIntent`; injects recent git context |
+| **DAGScheduler** | Schedules agent nodes per workflow definition (parallel / serial, retry, artifact passing) |
+| **AgentLoop** | Per-role execution loop; wraps the underlying LLM SDK conversation flow |
+| **SkillRegistry** | Registers, loads, and discovers skills (Standards and Capabilities) |
+| **MemoryStore** | Repository-native structured memory access |
+
+### 4.3 Tech Stack
+
+- **Language:** TypeScript (strict mode)
+- **Runtime:** Node.js 20+, ESM
+- **Package manager:** pnpm workspace
+- **Testing:** Vitest
+- **Underlying SDK:** Anthropic Claude Agent SDK (default), with OpenRouter compatibility for other models
+- **Configuration:** YAML (workflow / routing / `xerness.config`)
+
+### 4.4 How It Is Installed
+
+Xerness is distributed as an npm package and injects the team harness into a target repository via CLI:
+
+```
+npx xerness init --target cursor       # Cursor
+npx xerness init --target claude-code  # Claude Code
+npx xerness init --target codex        # Codex
+```
+
+After initialization, the target project receives a unified set of routing rules, workflows, memory templates, and skills. **All content lives in the project's own repository; Xerness stores no user data.**
+
+> See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full architecture and component breakdown.
 
 ---
 
-## 想了解更多
+## 5. Relationship to Existing Tools
 
-- 想问问题 → 看 [FAQ](./FAQ.md)
-- 想看具体例子 → 看 [USE-CASES](./USE-CASES.md)
-- 想聊合作 → 联系 ZIHAO
+| Tool | Strength | What Xerness Adds |
+|------|----------|-------------------|
+| Cursor / Claude Code | Strong individual coding UX | Shared standards, workflows, and memory across the team |
+| Codex | Strong execution on engineering tasks | Team-level coordination and handoff |
+| OpenClaw | Persistent assistants and SOUL ecosystem | Repo-native workflows and release rituals |
+
+**Xerness does not replace these tools. It adds a team layer on top of them.**
 
 ---
 
-> "个人 AI workflow 很容易火,但团队真正的瓶颈不是某个人会不会用 prompt,而是有没有统一规范、统一 review、统一 release。Xerness 就是补这一层。"
+## 6. Who It Is For
+
+**Suitable**
+
+- Engineering teams of 3–30 people
+- Teams already using Cursor / Claude Code / Codex
+- Founders and engineering leaders who want a unified team-level AI operating model
+
+**Not yet suitable**
+
+- Pure individual projects or one-off scripts
+- Teams that have not yet adopted AI coding tools (the "should we use AI" question must be settled first)
+
+---
+
+## 7. Current Status
+
+| Module | Status |
+|--------|--------|
+| Core engine (IntentParser + DAGScheduler + AgentLoop) | Done |
+| Role system (PM / Tech / Test / DevOps) | Done |
+| Daily internal use | In production |
+| Cursor integration | Done |
+| Claude Code integration | Done |
+| Codex integration | In progress |
+| OpenClaw integration | Planned |
+| Core-layer open source | In preparation |
+
+---
+
+## 8. Further Reading
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md) — System layers, key components, typical workflow
+- [FAQ.md](./FAQ.md) — Frequently asked questions and standard external talking points
+- [USE-CASES.md](./USE-CASES.md) — Three concrete before/after scenarios
+
+> Full source code and internal implementation details remain in private repositories. Please contact us through the channels below for deeper access.
+
+---
+
+## 9. Contact
+
+- **Maintainer:** XerpaAI
+- **Business and partnerships:** ZIHAO
+
+---
+
+*Xerness is designed and maintained by the XerpaAI team. This repository is updated as the product evolves.*

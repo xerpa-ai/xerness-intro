@@ -1,227 +1,203 @@
-# Xerness · 高频问题 (AMA)
+# Xerness · FAQ
 
-> 为非技术同事(运营/产品)准备的答疑材料。
-> 你可以直接拿这页去对外分享会、宣讲、合作沟通。
-
----
-
-## 一、定位类
-
-### Q1. Xerness 到底是什么?用一句话讲
-
-> 团队层的 AI 协作系统。让团队里每个人的 AI 用法统一起来,经验能沉淀。
-
-### Q2. 它和 Cursor / Claude Code 是竞争关系吗?
-
-**不是。** 它们是工具,Xerness 是团队层。
-
-打个比方:
-- Cursor / Claude Code 像"个人手机"
-- Xerness 像"公司 IT 系统",让大家的手机能在公司流程里协调工作
+This document collects high-frequency questions about Xerness and standard external answers.
+It is written for product managers, operators, and partners, and is intended to support external briefings and AMA sessions.
 
 ---
 
-### Q3. 那它和 Coze、Dify、扣子 有什么不同?
+## 1. Positioning
 
-它们是给业务/运营做 AI agent 的(客服、营销机器人这类)。
+### 1.1 What is Xerness?
 
-Xerness 是**专门给工程团队**做研发协作的。
+Xerness is a team-level AI collaboration system for engineering organizations. It sits above AI coding tools such as Cursor, Claude Code, and Codex, and provides team-layer role specialization, workflow orchestration, repository-native memory, and cross-role handoff so that teams can use AI in a unified way.
 
-不是一个赛道。
+### 1.2 How does it relate to Cursor or Claude Code?
 
----
+They are not competitors. Cursor and Claude Code are AI tools used by individual developers (the *individual layer*). Xerness is the *team layer* built on top of them — analogous to the relationship between personal productivity apps and an enterprise collaboration system.
 
-### Q4. 它和 GitHub Copilot 有什么不同?
+### 1.3 How is it different from Coze, Dify, or similar platforms?
 
-Copilot 帮一个人写代码。
+Coze and Dify are no-code platforms for building **business-side** AI applications (customer support bots, marketing automation, business workflows). Xerness is built for **internal engineering team collaboration** and serves the software development process itself. They occupy different categories.
 
-Xerness 让一个**团队**协调地用各种 AI 工具(包括 Copilot)。
+### 1.4 How is it different from GitHub Copilot?
 
----
-
-## 二、价值类
-
-### Q5. 用了它,我们团队具体能省什么?
-
-| 之前 | 之后 |
-|------|------|
-| 每个人 prompt 写法不一样 | 团队统一一套写法 |
-| 踩过的坑还会再踩 | 经验自动沉淀,下次 AI 自己规避 |
-| PRD/代码/测试中间靠人肉复制 | 自动交接 |
-| 新人不知道团队怎么用 AI | 一进项目就有完整规范 |
-| 每个人 AI 效率 +30% | 团队整体效率才能 +30% |
+Copilot optimizes the experience of a single developer. Xerness optimizes how the whole team uses AI tools — including Copilot — together.
 
 ---
 
-### Q6. ROI 怎么算?
+## 2. Value
 
-我们内部观察:
+### 2.1 What concretely changes after a team adopts Xerness?
 
-- **新人上手时间** 从 2 周 → 3 天
-- **代码评审一致性** 显著提升 (不再靠"看谁审")
-- **重复踩坑** 大幅下降 (经验进了 memory)
+| Dimension | Before | After |
+|-----------|--------|-------|
+| Prompts and workflows | Each engineer figures it out alone | Team-wide standard |
+| Knowledge reuse | The same mistakes repeat | Lessons captured automatically; future agents avoid them |
+| Cross-role handoff | Copy-paste from chat | Automatic artifact passing |
+| New-hire onboarding | Long ramp-up | Day-one access to the full team operating model |
+| Team efficiency | Individuals improve, team does not | Team-level efficiency improves alongside individuals |
 
-具体数字看团队规模和现状。AMA 时可以现场聊。
+### 2.2 How is ROI measured?
 
----
+Internal observations to date:
 
-### Q7. 听起来像"AI 版 Confluence/Notion"?
+- New-hire time-to-first-independent-output drops from roughly two weeks to about three days
+- Code review consistency increases significantly; outcomes depend less on which reviewer is assigned
+- Recurrence of historical issues and known pitfalls drops noticeably
 
-不一样。
+Specific gains depend on team size and current state. We are happy to discuss in detail during AMA.
 
-- Confluence/Notion 是**给人看**的文档,看的人少,过时快
-- Xerness 沉淀的东西**是 AI 直接读**的,会自动遵守和应用
+### 2.3 How does it differ from Confluence, Notion, and similar knowledge bases?
 
-文档没人看也没用。但 AI 每次都会读 —— 这是关键区别。
-
----
-
-## 三、使用类
-
-### Q8. 用 Xerness 需要换掉现在的 AI 工具吗?
-
-**不需要。**
-
-继续用 Cursor / Claude Code / Codex。Xerness 是站在它们之上的一层。
+Content in Confluence or Notion is **read by humans**, and adoption typically decays over time. Content in Xerness is **read directly by AI** and is automatically applied during execution — it does not depend on people remembering to look it up.
 
 ---
 
-### Q9. 接入要多久?
+## 3. Usage
 
-接一个项目大约 1-2 天:
-- Day 1: 装上、接入仓库、跑通基本流程
-- Day 2: 团队对齐角色和工作流,试跑一两个真实任务
+### 3.1 Do we need to replace our existing AI tools?
 
----
+No. Cursor, Claude Code, and Codex remain in place. Xerness sits above them as a collaboration layer; it does not replace the tools themselves.
 
-### Q10. 团队多大才适合?
+### 3.2 How long does adoption take?
 
-最甜蜜区间:**3-30 人**。
+A typical project takes 1–2 working days:
 
-- < 3 人:可能用不上协作功能
-- > 30 人:也能用,但要分子团队接入
+- Day 1: install, integrate the repository, and run the basic flow end-to-end
+- Day 2: align role definitions and workflows, then trial-run 1–2 real tasks
 
----
+### 3.3 What team size is the sweet spot?
 
-### Q11. 非技术成员(产品/运营)需要学什么吗?
+Best fit: 3–30 people.
 
-**几乎不用。**
+- Smaller teams: collaboration benefits are limited
+- Larger teams: roll out by sub-team
 
-产品经理只需要正常提需求 —— 系统会自动把需求转成 PRD,后续研发接手。
+### 3.4 Do non-technical members (Product / Operations) need to learn anything?
 
-运营基本不直接用,但能从"研发交付变快、变稳"间接受益。
-
----
-
-## 四、商业 / 开源类
-
-### Q12. 这个东西要开源吗?
-
-会开源。
-
-- **开源**:核心引擎、协作协议、基础工作流模板
-- **商业版**:面向公司的治理、审计、组织级权限、企业 onboarding
-
-逻辑:开源驱动采用,商业层让"在公司里安全大规模用"成立。
+Effectively no. Product managers submit requests as usual; the system handles handoff to engineering and QA. Operations typically do not interact with Xerness directly but benefit from faster and more reliable engineering delivery.
 
 ---
 
-### Q13. 怎么收费?
+## 4. Commercial and Open Source
 
-商业版按团队/公司规模收费,具体方案后续公布。
+### 4.1 Will Xerness be open source?
 
-开源版永久免费。
+Yes. The boundary between open source and commercial editions:
 
----
+| Scope | Contents |
+|-------|----------|
+| Open source | Core engine, collaboration protocols, base workflow templates, public capability packs |
+| Commercial | Org-level governance, rollout controls, audit and permissions, private skill packs, enterprise onboarding |
 
-### Q14. 数据安全?
+Design principle: **open source drives adoption; the commercial layer makes adoption safe at scale.**
 
-Xerness 本身**不存储代码和数据**。
+### 4.2 How is the commercial edition priced?
 
-- 工作流、规范、记忆都存在你自己的 Git 仓库里
-- AI 调用走你自己的 API key (Cursor / Claude / OpenAI)
-- 我们不接触你的源码和业务数据
+Tiered by team / company size. Pricing will be announced at the commercial release. The open-source edition will remain free permanently.
 
----
+### 4.3 How is data and code security handled?
 
-## 五、产品方向类
+Xerness itself does not store user code or business data:
 
-### Q15. 主打哪个 AI 工具?
-
-主战场是 **Cursor + Claude Code**,因为这两个工具最容易快速被团队采纳。
-
-下一步是 **Codex**(用来强化"AI 能干完整工程")。
-
-再后面是 **OpenClaw**(持久化 AI 助手生态)。
+- Workflows, standards, and memory live in the team's own Git repository
+- LLM calls use the team's own API credentials
+- Xerness does not access user source code or business data
 
 ---
 
-### Q16. 现在到哪一步了?
+## 5. Product Direction
 
-- ✅ 核心引擎已跑通
-- ✅ 内部团队 daily 在用
-- ✅ Cursor + Claude Code 接入完成
-- 🟡 Codex 接入中
-- 🟡 开源准备中
+### 5.1 Which AI tools are supported?
+
+Current priorities:
+
+| Priority | Tool | Rationale |
+|----------|------|-----------|
+| P0 | Cursor / Claude Code | Fastest path to team adoption; strongest validation surface |
+| P1 | Codex | Strengthens end-to-end engineering execution |
+| P2 | OpenClaw | Expands into the persistent-assistant / SOUL ecosystem |
+
+### 5.2 What is the underlying thesis?
+
+1. AI has materially improved individual developer productivity (already happened)
+2. Team-level productivity does not automatically follow (current reality)
+3. A team-layer AI collaboration system will inevitably emerge (necessary)
+4. Establishing the standard early creates a first-mover advantage (opportunity)
 
 ---
 
-### Q17. 为什么相信这件事会成?
+## 6. Technical Questions
 
-逻辑很朴素:
+> The following questions target technically-inclined readers. Full details are in [ARCHITECTURE.md](./ARCHITECTURE.md).
 
-1. AI 让个人开发者效率大幅提升 → **已经发生**
-2. 但团队不会自动跟着提升 → **现状**
-3. 团队 AI 协作层迟早会有人做 → **必然**
-4. 越早建立"团队层"的标准,越有先发优势 → **机会**
+### 6.1 What model does Xerness use?
+
+By default, the Anthropic Claude Agent SDK (`claude-sonnet-4.6`), with OpenRouter compatibility for other models. Configurable per team via `xerness.config.yaml`.
+
+### 6.2 How does "agents automatically follow team standards" actually work?
+
+Through two mechanisms:
+1. **Standards** skills inject relevant rules into the agent's system prompt at every call.
+2. **Memory** is retrieved before execution so historical decisions and lessons are surfaced into context.
+
+Together, these constrain agent behavior without relying on humans to remind it.
+
+### 6.3 How are workflows defined?
+
+Declaratively, as YAML DAGs. Each node corresponds to one role agent; its output flows automatically to the next node. The DAGScheduler decides what runs in parallel and what runs in series.
+
+### 6.4 What are the prerequisites for adoption?
+
+- Node.js 20+
+- The team's own Anthropic / OpenRouter API key
+- A target repository (Cursor / Claude Code / Codex compatible)
+
+### 6.5 Is there a server component to deploy?
+
+**No.** Xerness ships as an npm package. All configuration and memory live in the team's own Git repository; LLM calls use the team's own credentials.
+
+### 6.6 What is the relationship to the Claude Agent SDK?
+
+The Claude Agent SDK is one of the **underlying invocation interfaces** Xerness uses. Xerness builds the team-layer protocols, workflow orchestration, and memory system on top of it. They operate at different layers.
 
 ---
 
-## 六、给不懂技术的人讲 Xerness 的标准说法
+## 7. Common Objections
 
-如果你要在 30 秒内讲清楚,推荐这段:
+### 7.1 Isn't this just "prompt engineering as a project"?
 
-> Xerness 是团队层的 AI 协作系统。
+No. Prompts are only the surface. The substance of Xerness includes:
+
+- Role-level protocols
+- Cross-role handoff protocols
+- Repository-native structured knowledge capture
+- Composable AI collaboration mechanisms within the engineering process
+
+Prompts are a small part of the whole.
+
+### 7.2 Won't a middle layer be obsoleted by faster-improving foundation models?
+
+Stronger models do not eliminate the question of *how a team coordinates around them*. In fact, as models improve, the gap between teams **with** a collaboration layer and teams **without** one grows wider, not narrower.
+
+### 7.3 Why not just build this on top of Coze or Dify?
+
+Coze and Dify are no-code **business-process** automation platforms. Their target scenarios do not overlap with Xerness. Using a business-process tool to manage how an engineering team works is a mismatch of abstraction.
+
+---
+
+## 8. Standard External Talking Point
+
+If you have 30 seconds to introduce Xerness, the recommended phrasing is:
+
+> Xerness is a team-level AI collaboration system.
 >
-> 现在团队里每个人都在用 AI,但用法乱、经验留不下来、协作靠复制粘贴。
+> Engineering teams already use AI, but usage is fragmented, lessons are not captured, and cross-role collaboration depends on manual copy-paste.
 >
-> Xerness 在 Cursor、Claude Code 这些工具之上,加一层"团队怎么一起用 AI"的操作系统 ——
-> 让团队的角色、规范、记忆、交接,都变成 AI 自动会遵守的东西。
+> Xerness adds a team operating layer on top of Cursor, Claude Code, and similar tools — turning team roles, standards, memory, and handoff into assets that AI agents automatically apply.
 >
-> 一句话:**它解决的不是"一个人怎么用 AI",而是"一个团队怎么一起用 AI"。**
+> In one line: **it solves not "how an individual uses AI", but "how a team uses AI together".**
 
 ---
 
-## 七、AMA 现场可能被问到的"刁钻问题"
-
-### Q18. 这不就是"提示词工程项目化"吗?
-
-不止。
-
-提示词只是表面。Xerness 真正做的是:
-- 角色协议
-- 跨角色交接协议
-- 团队知识结构化沉淀
-- 让 AI 真正能在工程流程里被组合使用
-
-提示词是其中一小块。
-
----
-
-### Q19. 大模型迭代这么快,你做的中间层会不会被淘汰?
-
-模型再强,**团队怎么协调用它**这个问题不会消失。
-
-模型变强,只会让"团队层有没有规范"的差距更大,而不是更小。
-
----
-
-### Q20. 为什么不直接用 Coze / Dify 搭一个?
-
-它们是面向**业务流程自动化**的低代码平台,不是面向**研发团队协作**的。
-
-像让"做客服机器人的工具"去管"研发团队怎么写代码",方向不对。
-
----
-
-> 还有问题没答到? AMA 时直接抛出来,我们当场聊。
+*If your question is not covered here, raise it during the AMA.*
