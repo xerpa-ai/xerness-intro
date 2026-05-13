@@ -147,23 +147,7 @@ End-to-end flow for *"product manager submits a request → production":*
 | Default model | `anthropic/claude-sonnet-4.6` (via OpenRouter) | Best fit for engineering collaboration today; OpenRouter simplifies multi-model swap |
 | Configuration | YAML | Declarative; readable and editable by non-engineering roles |
 
----
 
-## 5. Deployment Model
-
-Xerness is distributed as an npm package. **There is nothing to deploy.**
-
-- No server component, no centralized storage
-- All configuration, workflows, and memory live in the team's own Git repository
-- LLM calls use the team's own API credentials
-- Xerness does not access user source code or business data
-
-Adoption is a single command:
-
-```bash
-npx xerness@latest init --target cursor
-npx xerness@latest init --target claude-code
-npx xerness@latest init --target codex
 ```
 
 After initialization, the target repository receives an `.agent/` directory:
