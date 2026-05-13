@@ -128,26 +128,6 @@ When a role completes its task, output is delivered as a standardized artifact r
 | **SkillRegistry** | Registers, loads, and discovers skills (Standards and Capabilities) |
 | **MemoryStore** | Repository-native structured memory access |
 
-### 4.3 Tech Stack
-
-- **Language:** TypeScript (strict mode)
-- **Runtime:** Node.js 20+, ESM
-- **Package manager:** pnpm workspace
-- **Testing:** Vitest
-- **Underlying SDK:** Anthropic Claude Agent SDK (default), with OpenRouter compatibility for other models
-- **Configuration:** YAML (workflow / routing / `xerness.config`)
-
-### 4.4 How It Is Installed
-
-Xerness is distributed as an npm package and injects the team harness into a target repository via CLI:
-
-```
-npx xerness init --target cursor       # Cursor
-npx xerness init --target claude-code  # Claude Code
-npx xerness init --target codex        # Codex
-```
-
-After initialization, the target project receives a unified set of routing rules, workflows, memory templates, and skills. **All content lives in the project's own repository; Xerness stores no user data.**
 
 > See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full architecture and component breakdown.
 
