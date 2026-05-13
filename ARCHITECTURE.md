@@ -147,21 +147,7 @@ End-to-end flow for *"product manager submits a request → production":*
 | Default model | `anthropic/claude-sonnet-4.6` (via OpenRouter) | Best fit for engineering collaboration today; OpenRouter simplifies multi-model swap |
 | Configuration | YAML | Declarative; readable and editable by non-engineering roles |
 
-
-```
-
-After initialization, the target repository receives an `.agent/` directory:
-
-```
-.agent/
-├── AGENTS.md            # multi-role routing rules
-├── agents/              # role definitions (PM / Tech / Test / DevOps)
-├── prompts/             # templates and history
-├── workflows/           # DAG workflow YAML
-├── skills/              # skill collection
-├── memory/              # team memory
-└── routing.yaml         # routing configuration
-```
+---
 
 ## 5. Extensibility
 
