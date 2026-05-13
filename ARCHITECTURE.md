@@ -163,9 +163,7 @@ After initialization, the target repository receives an `.agent/` directory:
 └── routing.yaml         # routing configuration
 ```
 
----
-
-## 6. Extensibility
+## 5. Extensibility
 
 Xerness is designed to be **rewritten by the adopting team**:
 
@@ -176,7 +174,7 @@ Xerness is designed to be **rewritten by the adopting team**:
 
 ---
 
-## 7. Out of Scope for This Repository
+## 6. Out of Scope for This Repository
 
 To protect commercial assets and team know-how, the following are not included here:
 
