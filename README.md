@@ -1,195 +1,306 @@
-# Xerness
+<p align="center">
+  <img src="./assets/banner.svg" alt="Xerness — Multi-agent orchestration infrastructure" width="100%" />
+</p>
 
-**The team operating layer for AI coding agents.**
+<h1 align="center">Xerness</h1>
 
-Xerness is a team-level collaboration system for engineering organizations. It sits above AI coding tools such as Cursor, Claude Code, Codex, and OpenClaw, and adds the missing team layer — role specialization, workflow orchestration, repository-native memory, and cross-role handoff — turning *individual use of AI* into *coordinated team use of AI*.
+<p align="center">
+  <b>Multi-agent orchestration infrastructure for software delivery.</b><br/>
+  Describe what you want in plain language. Xerness orchestrates a team of specialized AI agents<br/>through the full development pipeline — and delivers runnable code.
+</p>
 
-> This repository is a **public overview** of Xerness, written for product managers, operators, partners, and technical liaisons.
-> It contains no source code or internal implementation details.
->
-> Maintainer: **XerpaAI** · Status: in active internal use, preparing core-layer open source release.
+<p align="center">
+  <a href="./LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/License-Apache_2.0-0A0A0A.svg?style=flat-square&labelColor=0A0A0A&color=63E6A2"></a>
+  <img alt="Node" src="https://img.shields.io/badge/Node-%E2%89%A520-0A0A0A?style=flat-square&labelColor=0A0A0A&color=8b8b8b">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-strict-0A0A0A?style=flat-square&labelColor=0A0A0A&color=8b8b8b">
+  <a href="https://xagt.ai"><img alt="Website" src="https://img.shields.io/badge/Website-xagt.ai-0A0A0A?style=flat-square&labelColor=0A0A0A&color=63E6A2"></a>
+  <a href="https://x.com/XAgent_official"><img alt="X" src="https://img.shields.io/badge/Follow-%40XAgent__official-0A0A0A?style=flat-square&labelColor=0A0A0A&color=8b8b8b"></a>
+  <img alt="Part of XAgent" src="https://img.shields.io/badge/Part_of-XAgent-0A0A0A?style=flat-square&labelColor=0A0A0A&color=63E6A2">
+</p>
 
----
-
-## Table of Contents
-
-- [1. Background and Positioning](#1-background-and-positioning)
-- [2. Product Architecture](#2-product-architecture)
-- [3. Core Capabilities](#3-core-capabilities)
-- [4. Technical Architecture](#4-technical-architecture)
-- [5. Relationship to Existing Tools](#5-relationship-to-existing-tools)
-- [6. Who It Is For](#6-who-it-is-for)
-- [7. Current Status](#7-current-status)
-- [8. Further Reading](#8-further-reading)
-- [9. Contact](#9-contact)
-
----
-
-## 1. Background and Positioning
-
-Over the past two years, AI coding tools (Cursor, Claude Code, Copilot, Codex, etc.) have meaningfully improved **individual** developer productivity. At the team level, however, we observe a consistent set of unresolved problems:
-
-| Dimension | Current Reality |
-|-----------|-----------------|
-| Usage style | Each engineer invents their own prompts and workflows; no shared standard |
-| Knowledge retention | Lessons learned are scattered across chat history; rarely reused |
-| Cross-role handoff | Product → Engineering → QA → Release relies on manual copy-paste |
-| New-hire onboarding | No structured way to transfer "how this team uses AI" |
-| Team-level efficiency | Individuals are 30% faster, but the team is not |
-
-Xerness is positioned to fill that team operating layer:
-
-> Existing AI tools answer *whether AI can do the work*.
-> Xerness answers *how a team uses AI together*.
+<p align="center">
+  <a href="#quickstart">Quickstart</a> &nbsp;·&nbsp;
+  <a href="#how-it-works">How it works</a> &nbsp;·&nbsp;
+  <a href="#define-your-agents">Agents</a> &nbsp;·&nbsp;
+  <a href="#orchestrate-a-workflow">Workflows</a> &nbsp;·&nbsp;
+  <a href="#programmatic-api">API</a> &nbsp;·&nbsp;
+  <a href="./ARCHITECTURE.md">Architecture</a> &nbsp;·&nbsp;
+  <a href="./FAQ.md">FAQ</a>
+</p>
 
 ---
 
-## 2. Product Architecture
+## What is Xerness?
+
+Modern AI coding tools — Cursor, Claude Code, Codex — make an *individual* developer faster. Xerness makes the *whole delivery pipeline* faster by treating software development as a **multi-agent problem**.
+
+You give Xerness a requirement in natural language. It parses intent, builds an execution graph, and routes the work through specialized role agents — Product, Engineering, QA, DevOps — each producing a real, versioned artifact that flows into the next. The result is not a chat transcript; it is **runnable code, tests, and a release plan committed to your repository.**
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│         Team (Product / Engineering / QA / DevOps)       │
-└──────────────────────────────────────────────────────────┘
-                            │
-              ┌─────────────▼─────────────┐
-              │          Xerness          │
-              │   Team operating layer    │
-              │                           │
-              │  · Role routing           │
-              │  · Workflows & handoffs   │
-              │  · Repo-native memory     │
-              │  · Review & ship rituals  │
-              └─────────────┬─────────────┘
-                            │
-        ┌──────────┬────────┼─────────┬──────────┐
-        ▼          ▼        ▼         ▼          ▼
-     Cursor   Claude Code  Codex   OpenClaw     ...
+"Add order history to the account page."
+        │
+        ▼
+   PM Agent  →  Tech Agent  →  Test Agent  →  DevOps Agent
+   PRD.md       src/ + design    tests/ passing   release-plan.md
+        │
+        ▼
+   Runnable code, in your repo, with the reasoning captured as memory.
+```
 
-                AI coding & execution tools
+**Xerness is infrastructure, not a chatbot.** It ships as an npm package, runs against your own model credentials, and keeps every workflow, standard, and memory inside your Git repository. There is no server to deploy and no data leaves your control.
+
+---
+
+## How it works
+
+<p align="center">
+  <img src="./assets/pipeline.svg" alt="Xerness pipeline: natural language in, runnable code out" width="100%" />
+</p>
+
+| Stage | Component | What happens |
+|-------|-----------|--------------|
+| **Parse** | `IntentParser` | Turns a natural-language request into a structured `ParsedIntent`, injecting recent git context and routing it to an entry role. |
+| **Orchestrate** | `DAGScheduler` | Reads a declarative workflow (YAML DAG) and schedules role agents — parallel where possible, serial where required — passing artifacts between nodes. |
+| **Execute** | `AgentLoop` | Each role agent loads its behavior definition, relevant skills, and repository memory, then calls the underlying LLM to produce a standardized artifact. |
+| **Remember** | `MemoryStore` | Decisions, lessons, and patterns are written back into the repository so the next run — and the next teammate — starts with full context. |
+
+---
+
+## Quickstart
+
+> **Requirements:** Node.js ≥ 20, a target Git repository, and your own model API key (Anthropic or any OpenRouter-compatible provider).
+
+```bash
+# 1. Add Xerness to your project
+npm install --save-dev xerness    # or: pnpm add -D xerness
+
+# 2. Scaffold the .agent/ workspace, default roles, and config
+npx xerness init
+
+# 3. Point Xerness at your model
+echo "ANTHROPIC_API_KEY=sk-..." >> .env
+
+# 4. Describe what you want — Xerness runs the full pipeline
+npx xerness run "Add order history to the account page"
+```
+
+`xerness run` executes the workflow end to end and writes the artifacts into your repository:
+
+```
+your-repo/
+├── .agent/
+│   ├── agents/            # role definitions (PM / Tech / Test / DevOps)
+│   ├── skills/            # standards + capabilities (SKILL.md)
+│   ├── workflows/         # YAML DAGs
+│   ├── memory/            # decisions · lessons · patterns · context
+│   └── routing.yaml       # which prompts go to which role
+├── src/                   # ← generated / modified feature code
+├── tests/                 # ← generated test suite
+├── PRD.md                 # ← product spec
+└── release-plan.md        # ← ship checklist
 ```
 
 ---
 
-## 3. Core Capabilities
+## Define your agents
 
-### 3.1 Role Specialization
+A role is a directory under `.agent/agents/`. Each declares its behavior, the skills it may use, and the model it runs on — no core code changes required.
 
-Xerness does not provide a single general-purpose assistant. Instead, it defines distinct engineering roles. Each role has its own behavior definition (SOUL), workflow preferences, and skill set.
+```yaml
+# .agent/agents/tech/agent.yaml
+name: tech
+role: Engineering
+description: Turns a PRD into a working, tested implementation.
+model: anthropic/claude-sonnet-4.6   # any OpenRouter-compatible model
+skills:
+  - standards/typescript-strict      # injected into the system prompt
+  - standards/review-checklist
+  - capabilities/shell-exec          # exposed as a callable tool
+  - capabilities/http-fetch
+memory:
+  read:  [decisions, lessons, patterns, context]
+  write: [decisions, lessons]
+```
 
-| Role | Responsibility |
-|------|----------------|
-| Product (PM) | Vague request → PRD |
-| Engineering (Tech) | Technical design and implementation |
-| QA (Test) | Test cases and regression |
-| DevOps | Deployment and monitoring |
+Skills come in two kinds:
 
-### 3.2 Workflow Orchestration
+- **Standards** — rules injected into the agent's system prompt (coding conventions, review checklists). They constrain *how* the agent works.
+- **Capabilities** — tools registered as `tool_use` (`shell-exec`, `http-fetch`, …). They extend *what* the agent can do.
 
-Tasks are described declaratively as YAML DAGs. The scheduler decides which steps run in parallel and which must run in series. Each node corresponds to one role agent's execution; its artifact is automatically passed to the next node as input.
-
-### 3.3 Repository-Native Memory
-
-Team standards and lessons live **inside the project repository**, not in an external knowledge base. Memory is structured by category — decisions, lessons, patterns, solutions, context — and is retrieved by agents before execution. New team members start with the team's full operating history, not a blank slate.
-
-### 3.4 Cross-Role Handoff
-
-When a role completes its task, output is delivered as a standardized artifact rather than as conversational context. This makes the entire Product → Engineering → QA → Release pipeline traceable and replayable.
+Each skill is a self-contained directory with a `SKILL.md` (YAML frontmatter + body). Fork it, extend it, share it.
 
 ---
 
-## 4. Technical Architecture
+## Orchestrate a workflow
 
-### 4.1 System Layers
+Workflows are declarative DAGs. Nodes are role agents; edges are artifact handoffs. The scheduler decides what runs in parallel and what runs in series.
+
+```yaml
+# .agent/workflows/feature.yaml
+name: feature
+description: Requirement → shipped feature.
+nodes:
+  - id: spec
+    agent: pm
+    output: PRD.md
+
+  - id: build
+    agent: tech
+    needs: [spec]           # consumes PRD.md
+    output: [src/, design.md]
+
+  - id: test
+    agent: test
+    needs: [build]
+    output: tests/
+
+  - id: ship
+    agent: devops
+    needs: [test]
+    output: release-plan.md
+
+  # parallel branch: docs are written while tests run
+  - id: docs
+    agent: tech
+    needs: [build]
+    output: docs/
+```
+
+```bash
+npx xerness run "Add order history to the account page" --workflow feature
+```
+
+---
+
+## Programmatic API
+
+Prefer to drive Xerness from your own tooling or CI? Use the TypeScript API.
+
+```ts
+import { Xerness } from "xerness";
+
+const x = new Xerness({
+  repo: process.cwd(),
+  model: "anthropic/claude-sonnet-4.6",
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
+
+const result = await x.run({
+  request: "Add order history to the account page",
+  workflow: "feature",
+});
+
+console.log(result.artifacts);
+// {
+//   "PRD.md":          "...",
+//   "src/":            ["OrderHistory.tsx", "orders.api.ts"],
+//   "tests/":          ["orderHistory.test.ts"],
+//   "release-plan.md": "..."
+// }
+
+for (const decision of result.memory.decisions) {
+  console.log(decision.title, "→", decision.rationale);
+}
+```
+
+Every run returns the artifacts it produced and the memory it wrote — so you can gate CI on it, diff it, or replay it.
+
+---
+
+## Architecture
+
+Xerness is organized into four layers. See **[ARCHITECTURE.md](./ARCHITECTURE.md)** for the full component breakdown and a worked end-to-end trace.
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  Adapter Layer                                  │
-│  CLI · Cursor · Claude Code · Codex · OpenClaw  │
+│  Adapter        CLI · Cursor · Claude Code · …   │  normalize surfaces
 ├─────────────────────────────────────────────────┤
-│  Orchestration Layer                            │
-│  IntentParser · DAGScheduler · WorkflowEngine   │
+│  Orchestration  IntentParser · DAGScheduler      │  parse + schedule
 ├─────────────────────────────────────────────────┤
-│  Execution Layer                                │
-│  AgentLoop · BaseAgent · SkillRegistry          │
+│  Execution      AgentLoop · BaseAgent · Skills   │  run role agents
 ├─────────────────────────────────────────────────┤
-│  Infrastructure Layer                           │
-│  AgentClient · MessageBus · ArtifactStore       │
-│  MemoryStore · Logger                           │
+│  Infrastructure AgentClient · MemoryStore · Bus  │  LLM · memory · IO
 └─────────────────────────────────────────────────┘
 ```
 
-### 4.2 Key Components
+---
 
-| Component | Responsibility |
-|-----------|----------------|
-| **IntentParser** | Parses natural-language requests into a structured `ParsedIntent`; injects recent git context |
-| **DAGScheduler** | Schedules agent nodes per workflow definition (parallel / serial, retry, artifact passing) |
-| **AgentLoop** | Per-role execution loop; wraps the underlying LLM SDK conversation flow |
-| **SkillRegistry** | Registers, loads, and discovers skills (Standards and Capabilities) |
-| **MemoryStore** | Repository-native structured memory access |
+## Repository-native memory
 
+Team knowledge lives **inside the repository**, not in an external wiki — so it is versioned with the code and read by agents automatically before every run.
 
-> See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full architecture and component breakdown.
+```
+.agent/memory/
+├── decisions/   why a choice was made
+├── lessons/     pitfalls already hit, and the fix
+├── patterns/    reusable solutions
+└── context/     project background
+```
+
+A new engineer — or a fresh agent — starts with the team's full operating history, not a blank slate.
 
 ---
 
-## 5. Relationship to Existing Tools
+## Why Xerness
 
-| Tool | Strength | What Xerness Adds |
-|------|----------|-------------------|
-| Cursor / Claude Code | Strong individual coding UX | Shared standards, workflows, and memory across the team |
-| Codex | Strong execution on engineering tasks | Team-level coordination and handoff |
-| OpenClaw | Persistent assistants and SOUL ecosystem | Repo-native workflows and release rituals |
-
-**Xerness does not replace these tools. It adds a team layer on top of them.**
-
----
-
-## 6. Who It Is For
-
-**Suitable**
-
-- Engineering teams of 3–30 people
-- Teams already using Cursor / Claude Code / Codex
-- Founders and engineering leaders who want a unified team-level AI operating model
-
-**Not yet suitable**
-
-- Pure individual projects or one-off scripts
-- Teams that have not yet adopted AI coding tools (the "should we use AI" question must be settled first)
+- **Full pipeline, not a snippet.** Requirement → PRD → code → tests → release plan, as connected artifacts.
+- **Declarative and inspectable.** Workflows, roles, and routing are plain YAML you can read, diff, and review.
+- **Your infra, your keys.** npm package, no server, no data egress. LLM calls use your own credentials.
+- **Model-agnostic.** Anthropic Claude Agent SDK by default; any OpenRouter-compatible model via config.
+- **Memory that compounds.** Every run makes the next one — and the next teammate — better.
+- **Meets your tools where they are.** Adapters for Cursor, Claude Code, and Codex; the standards and memory apply consistently across all of them.
 
 ---
 
-## 7. Current Status
+## Status
+
+Xerness is in **active internal use** at XerpaAI. The core orchestration layer is being prepared for open-source release; this repository is its public home and reference documentation.
 
 | Module | Status |
 |--------|--------|
-| Core engine (IntentParser + DAGScheduler + AgentLoop) | Done |
-| Role system (PM / Tech / Test / DevOps) | Done |
-| Daily internal use | In production |
-| Cursor integration | Done |
-| Claude Code integration | Done |
-| Codex integration | In progress |
-| OpenClaw integration | Planned |
+| Core engine (IntentParser · DAGScheduler · AgentLoop) | Stable |
+| Role system (PM / Tech / Test / DevOps) | Stable |
+| Repository-native memory | Stable |
+| Cursor · Claude Code adapters | Available |
+| Codex adapter | In progress |
 | Core-layer open source | In preparation |
 
----
-
-## 8. Further Reading
-
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — System layers, key components, typical workflow
-- [FAQ.md](./FAQ.md) — Frequently asked questions and standard external talking points
-- [USE-CASES.md](./USE-CASES.md) — Three concrete before/after scenarios
-
-> Full source code and internal implementation details remain in private repositories. Please contact us through the channels below for deeper access.
+See the **[open issues](https://github.com/xerpa-ai/xerness-intro/issues)** to follow along or request early access.
 
 ---
 
-## 9. Contact
+## Documentation
 
-- **Maintainer:** XerpaAI
-- **Business and partnerships:** ZIHAO
+| Doc | What's inside |
+|-----|----------------|
+| **[ARCHITECTURE.md](./ARCHITECTURE.md)** | System layers, key components, a worked end-to-end trace, technology choices. |
+| **[USE-CASES.md](./USE-CASES.md)** | Three concrete before/after scenarios. |
+| **[FAQ.md](./FAQ.md)** | Positioning, security, commercial vs. open source, technical Q&A. |
+| **[CONTRIBUTING.md](./CONTRIBUTING.md)** | How to propose changes. |
+| **[SECURITY.md](./SECURITY.md)** | How to report a vulnerability. |
 
 ---
 
-*Xerness is designed and maintained by the XerpaAI team. This repository is updated as the product evolves.*
+## The XAgent family
+
+Xerness is part of **XAgent**, an ecosystem building agent-native developer infrastructure.
+
+- **Website** — [xagt.ai](https://xagt.ai)
+- **X / Twitter** — [@XAgent_official](https://x.com/XAgent_official)
+- **Token** — $XAGT
+
+---
+
+## Contributing
+
+Issues, discussions, and pull requests are welcome. Start with **[CONTRIBUTING.md](./CONTRIBUTING.md)**, and please review our **[Code of Conduct](./CODE_OF_CONDUCT.md)**.
+
+## Security
+
+Found a vulnerability? Please **do not** open a public issue — see **[SECURITY.md](./SECURITY.md)** for private disclosure.
+
+## License
+
+Xerness is released under the **[Apache License 2.0](./LICENSE)**.
+
+<p align="center"><sub>Designed and maintained by the XerpaAI team · part of the XAgent family.</sub></p>

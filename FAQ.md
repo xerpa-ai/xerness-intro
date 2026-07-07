@@ -200,4 +200,8 @@ If you have 30 seconds to introduce Xerness, the recommended phrasing is:
 
 ---
 
-*If your question is not covered here, raise it during the AMA.*
+*If your question is not covered here, open an [issue](https://github.com/xerpa-ai/xerness-intro/issues) or reach us via [xagt.ai](https://xagt.ai) / [@XAgent_official](https://x.com/XAgent_official).*
+
+---
+
+*Part of the [XAgent](https://xagt.ai) family.*

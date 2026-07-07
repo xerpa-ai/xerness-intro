@@ -1,5 +1,26 @@
+# OS
 .DS_Store
+Thumbs.db
+
+# Editors
 *.swp
 .idea/
 .vscode/
+
+# Node
 node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# Env & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Build & rendered assets
+dist/
+build/
+*.svg.png

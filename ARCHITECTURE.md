@@ -1,7 +1,8 @@
 # Xerness · Architecture
 
-This document describes the system layers, key components, typical workflow, and technology choices of Xerness.
-It is intended for partners and technical liaisons who need a deeper understanding of how Xerness works internally. **It does not include source code or internal prompt content.**
+Xerness is multi-agent orchestration infrastructure for software delivery: natural-language requirements go in, a team of specialized AI agents runs the full development pipeline, and runnable code comes out. This document describes the system layers, key components, a worked end-to-end trace, and technology choices.
+
+It is intended for engineers, partners, and technical liaisons who want a deeper understanding of how Xerness works internally. See the [README](./README.md) for the quickstart and API. **This document does not include proprietary prompt content.**
 
 ---
 
@@ -162,15 +163,14 @@ Xerness is designed to be **rewritten by the adopting team**:
 
 ## 6. Out of Scope for This Repository
 
-To protect commercial assets and team know-how, the following are not included here:
+To keep the open-source and commercial editions cleanly separated, the following live in the commercial edition rather than in the core:
 
-- The actual content of internal SOUL.md files
-- Implementation of governance, audit, and org-level rollout in the commercial edition
-- Implementation of private skill packs
-- Internal performance / cost data
+- Org-level governance, audit, and permissioned rollout controls
+- Private skill packs and proprietary behavior definitions
+- Enterprise onboarding tooling and internal performance / cost data
 
-For deeper access, please contact XerpaAI through business channels.
+For early access or partnership, reach us via [xagt.ai](https://xagt.ai) or [@XAgent_official](https://x.com/XAgent_official).
 
 ---
 
-*This architecture document is updated as the product evolves.*
+*Part of the [XAgent](https://xagt.ai) family. This document is updated as the product evolves.*

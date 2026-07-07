@@ -119,12 +119,12 @@ The three scenarios assume the following:
 
 ---
 
-## Going Deeper
+## Going deeper
 
-- **Applicability to your team** — best discussed during AMA
-- **Live demonstration** — please contact us through business channels
-- **Internal implementation details** — out of scope for this repository
+- **Get started** — see the [Quickstart](./README.md#quickstart) in the README
+- **How it works internally** — see [ARCHITECTURE.md](./ARCHITECTURE.md)
+- **Early access or a live walkthrough** — reach us via [xagt.ai](https://xagt.ai) / [@XAgent_official](https://x.com/XAgent_official)
 
 ---
 
-*Additional scenarios will be added as the product evolves.*
+*Part of the [XAgent](https://xagt.ai) family. Additional scenarios will be added as the product evolves.*
